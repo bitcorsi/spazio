@@ -1,98 +1,43 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dettaglio Corso – Spazio</title>
-  <link rel="stylesheet" href="style.css" />
-
-  <style>
-    .course-hero {
-      background: linear-gradient(135deg, #4f46e5, #6366f1);
-      padding: 50px 20px;
-      color: white;
-      text-align: center;
-      border-radius: 0 0 32px 32px;
-    }
-    .course-title {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-    .course-meta {
-      opacity: 0.9;
-      font-size: 1rem;
-    }
-
-    .course-box {
-      background: white;
-      margin-top: 30px;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-      animation: fadeIn 0.4s ease;
-    }
-
-    #corso-container img {
-      width: 100%;
-      border-radius: 16px;
-      margin-bottom: 20px;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettaglio Corso - Spazio Corsi</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-<header>
-  <h1>Dettaglio corso</h1>
-  <a class="btn" href="corsi.html">Torna ai corsi</a>
-</header>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <h1>Spazio Corsi</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="corsi.html" class="nav-link">Corsi</a></li>
+                <li><a href="proponi.html" class="nav-link">Proponi</a></li>
+            </ul>
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
 
-<section class="course-hero">
-  <h2 class="course-title" id="corso-title">Caricamento...</h2>
-  <p class="course-meta" id="corso-meta"></p>
-</section>
-
-<div class="container">
-  <div class="course-box" id="corso-container">
-    <p>Caricamento contenuti...</p>
-  </div>
-</div>
-
-<script src="script.js"></script>
-
-<script>
-  // Enriched loader for detail view
-  function renderCourseDetail(corso) {
-    const c = corso.fields;
-
-    document.getElementById('corso-title').textContent = c.titolo;
-
-    document.getElementById('corso-meta').textContent =
-      `${c.eta_min || ''} - ${c.eta_max || ''} anni • ${c.orario || ''}`;
-
-    document.getElementById('corso-container').innerHTML = `
-      ${c.immagine ? `<img src="${c.immagine}" alt="${c.titolo}" />` : ''}
-      <h3>Descrizione</h3>
-      <p>${c.descrizione || ''}</p>
-
-      <h3>Dettagli</h3>
-      <p><strong>Indirizzo:</strong> ${c.indirizzo || '—'}</p>
-      <p><strong>Orario:</strong> ${c.orario || '—'}</p>
-      <p><strong>Periodo:</strong> ${c.data_inizio || ''} → ${c.data_fine || ''}</p>
-
-      <h3>Contatti</h3>
-      <p><strong>Email:</strong> ${c.contatto_email || '—'}</p>
-      <p><strong>Telefono:</strong> ${c.contatto_tel || '—'}</p>
-
-      ${c.link_iscrizione ? `<a class="btn" href="${c.link_iscrizione}" target="_blank">Iscriviti</a>` : ''}
-    `;
-  }
-</script>
-
-</body>
-</html>
+    <main>
+        <section class="course-detail">
+            <div class="container">
+                <div class="course-header">
+                    <div class="course-image">
+                        <img id="courseImage" src="" alt="Immagine corso">
+                        <div class="course-badge" id="courseCategory"></div>
+                    </div>
+                    <div class="course-info">
+                        <h1 class="course-title" id="courseTitle"></h1>
+                        <p class="course-instructor" id="courseInstructor"></p>
+                        <div class="course-rating">
+                            <div class="stars" id="courseStars"></div>
+                            <span class="rating-text" id="courseRating"></span>
+                        </div>
+                       
