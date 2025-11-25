@@ -1,84 +1,69 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Corsi – Spazio</title>
-  <link rel="stylesheet" href="style.css" />
-
-  <style>
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-    .course-card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-      transition: 0.25s ease;
-    }
-    .course-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-    }
-    .course-card img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-    }
-    .course-info {
-      padding: 16px;
-    }
-    .course-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin: 0 0 8px 0;
-    }
-    .course-meta {
-      font-size: 0.9rem;
-      color: #555;
-      margin-bottom: 12px;
-    }
-
-    #search {
-      width:100%;
-      padding:14px;
-      border-radius:16px;
-      border:1px solid #ddd;
-      font-size:1rem;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutti i Corsi - Spazio Corsi</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-<header>
-  <h1>Corsi</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="proponi.html">Inserisci corso</a>
-  </nav>
-</header>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <h1>Spazio Corsi</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="corsi.html" class="nav-link active">Corsi</a></li>
+                <li><a href="proponi.html" class="nav-link">Proponi</a></li>
+            </ul>
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
 
-<section class="hero" style="border-radius:0;">
-  <h2>Tutti i corsi disponibili</h2>
-  <p>Esplora le attività aggiornate ogni giorno.</p>
-</section>
+    <main>
+        <section class="courses-hero">
+            <div class="container">
+                <h1 class="page-title">I Nostri Corsi</h1>
+                <p class="page-subtitle">Scopri tutte le opportunità di apprendimento</p>
+                
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="tutti">Tutti</button>
+                    <button class="filter-btn" data-filter="design">Design</button>
+                    <button class="filter-btn" data-filter="tecnologia">Tecnologia</button>
+                    <button class="filter-btn" data-filter="business">Business</button>
+                    <button class="filter-btn" data-filter="creativita">Creatività</button>
+                </div>
+            </div>
+        </section>
 
-<div class="container">
-  <input id="search" type="text" placeholder="Cerca un corso..." />
-  <div class="grid" id="lista-corsi">
-    <p>Caricamento corsi...</p>
-  </div>
-</div>
+        <section class="courses-section">
+            <div class="container">
+                <div class="courses-grid" id="coursesContainer">
+                    <!-- I corsi verranno caricati dinamicamente via JavaScript -->
+                    <div class="course-skeleton">
+                        <div class="skeleton-image"></div>
+                        <div class="skeleton-content">
+                            <div class="skeleton-title"></div>
+                            <div class="skeleton-text"></div>
+                            <div class="skeleton-price"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-<script src="script.js"></script>
-<script>
-  const searchInput = document.getElementById('search');
-  searchInput.addEventListener('input', () => filterCourses(searchInput.value.toLowerCase()));
-</script>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Spazio Corsi. Tutti i diritti riservati.</p>
+        </div>
+    </footer>
 
+    <script src="script.js"></script>
 </body>
 </html>
