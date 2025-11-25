@@ -1,83 +1,146 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Proponi un Corso – Spazio</title>
-  <link rel="stylesheet" href="style.css" />
-
-  <style>
-    .form-hero {
-      background: linear-gradient(135deg, #4f46e5, #6366f1);
-      padding: 50px 20px;
-      color: white;
-      text-align: center;
-      border-radius: 0 0 32px 32px;
-    }
-    .form-hero h2 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-      font-weight: 800;
-    }
-    .form-hero p {
-      opacity: 0.9;
-    }
-
-    .box {
-      background: white;
-      margin-top: 30px;
-      padding: 24px;
-      border-radius: 16px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-      animation: fadeIn 0.4s ease;
-      text-align: center;
-    }
-
-    .btn-large {
-      display: inline-block;
-      background: #4f46e5;
-      color: white;
-      padding: 16px 26px;
-      border-radius: 16px;
-      font-size: 1.2rem;
-      text-decoration: none;
-      font-weight: 700;
-      transition: 0.25s ease;
-    }
-
-    .btn-large:hover {
-      background: #3730a3;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proponi un Corso - Spazio Corsi</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-<header>
-  <h1>Invia il tuo corso</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="corsi.html">Corsi</a>
-  </nav>
-</header>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <h1>Spazio Corsi</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="corsi.html" class="nav-link">Corsi</a></li>
+                <li><a href="proponi.html" class="nav-link active">Proponi</a></li>
+            </ul>
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
 
-<section class="form-hero">
-  <h2>Proponi un nuovo corso</h2>
-  <p>Aggiungi in pochi secondi la tua attività al portale.</p>
-</section>
+    <main>
+        <section class="propose-hero">
+            <div class="container">
+                <h1 class="page-title">Proponi il Tuo Corso</h1>
+                <p class="page-subtitle">Condividi la tua conoscenza con la community</p>
+            </div>
+        </section>
 
-<div class="container">
-  <div class="box">
-    <p>Compila il modulo Airtable per inviare il tuo corso:</p>
+        <section class="propose-form-section">
+            <div class="container">
+                <form class="course-form" id="courseProposalForm">
+                    <div class="form-step active" id="step1">
+                        <h3>Informazioni Base</h3>
+                        <div class="form-group">
+                            <label for="courseTitle">Titolo del Corso *</label>
+                            <input type="text" id="courseTitle" name="courseTitle" required>
+                            <span class="char-counter">0/60</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="courseCategory">Categoria *</label>
+                            <select id="courseCategory" name="courseCategory" required>
+                                <option value="">Seleziona una categoria</option>
+                                <option value="design">Design</option>
+                                <option value="tecnologia">Tecnologia</option>
+                                <option value="business">Business</option>
+                                <option value="creativita">Creatività</option>
+                                <option value="altro">Altro</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="courseDescription">Descrizione *</label>
+                            <textarea id="courseDescription" name="courseDescription" rows="4" required></textarea>
+                            <span class="char-counter">0/500</span>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-next" data-next="step2">Continua</button>
+                        </div>
+                    </div>
 
-    <!-- Inserisci qui il link al tuo modulo Airtable -->
-    <a class="btn-large" href="#" target="_blank">Apri il modulo</a>
-  </div>
-</div>
+                    <div class="form-step" id="step2">
+                        <h3>Dettagli del Corso</h3>
+                        
+                        <div class="form-group">
+                            <label for="courseDuration">Durata del Corso *</label>
+                            <input type="text" id="courseDuration" name="courseDuration" placeholder="es. 8 ore, 4 settimane..." required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="courseLevel">Livello *</label>
+                            <select id="courseLevel" name="courseLevel" required>
+                                <option value="">Seleziona il livello</option>
+                                <option value="principiante">Principiante</option>
+                                <option value="intermedio">Intermedio</option>
+                                <option value="avanzato">Avanzato</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="coursePrice">Prezzo (€) *</label>
+                            <input type="number" id="coursePrice" name="coursePrice" min="0" step="0.01" required>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-prev" data-prev="step1">Indietro</button>
+                            <button type="button" class="btn btn-next" data-next="step3">Continua</button>
+                        </div>
+                    </div>
 
+                    <div class="form-step" id="step3">
+                        <h3>Informazioni Personali</h3>
+                        
+                        <div class="form-group">
+                            <label for="instructorName">Nome e Cognome *</label>
+                            <input type="text" id="instructorName" name="instructorName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="instructorEmail">Email *</label>
+                            <input type="email" id="instructorEmail" name="instructorEmail" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="instructorBio">La tua esperienza *</label>
+                            <textarea id="instructorBio" name="instructorBio" rows="4" required></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-prev" data-prev="step2">Indietro</button>
+                            <button type="submit" class="btn btn-primary">Invia Proposta</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="form-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <span class="progress-step active">1</span>
+                        <span class="progress-step">2</span>
+                        <span class="progress-step">3</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Spazio Corsi. Tutti i diritti riservati.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
