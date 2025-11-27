@@ -228,8 +228,41 @@ footer {
   .hero h2 { font-size: 1.8rem; }
   .detail-image { height: 190px; }
 }
+/* HERO MINIMAL su mobile */
 @media (max-width: 600px) {
+
+  .hero {
+    background: var(--primary) !important; /* colore pieno, no gradiente */
+    padding: 22px 14px 26px !important;    /* super compatta */
+    border-radius: 0 0 18px 18px;
+  }
+
+  .hero h2 {
+    font-size: 1.5rem !important;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+
+  .hero p {
+    font-size: 0.9rem !important;
+    margin: 0 0 12px;
+    opacity: 0.9;
+  }
+
+  .hero-buttons {
+    margin-top: 6px !important;
+  }
+
+  .hero-buttons .btn {
+    padding: 10px 16px !important;
+    font-size: 0.9rem !important;
+    border-radius: 14px;
+    margin: 4px;
+  }
+
+  /* Rimuove effetti e icone fluttuanti */
   .floating-area {
     display: none !important;
   }
 }
+
