@@ -228,3 +228,8 @@ footer {
   .hero h2 { font-size: 1.8rem; }
   .detail-image { height: 190px; }
 }
+@media (max-width: 600px) {
+  .floating-area {
+    display: none !important;
+  }
+}
