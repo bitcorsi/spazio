@@ -5,77 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dettaglio Corso – Portale Maker</title>
 
-  <!-- CSS globale -->
   <link rel="stylesheet" href="style.css" />
 
   <style>
-    /* HERO SPECIFICA PER I DETTAGLI */
-    .course-hero {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      padding: 70px 20px;
-      text-align: center;
-      color: white;
-      border-radius: 0 0 30px 30px;
+    /* LAYOUT GENERALE */
+    .course-layout {
+      display: flex;
+      gap: 28px;
+      margin-top: 40px;
+      align-items: flex-start;
+      flex-wrap: wrap;
     }
 
-    .course-hero h2 {
-      font-size: 2.4rem;
-      margin: 0;
-      font-weight: 900;
+    /* COLONNA IMMAGINE */
+    .course-image-box {
+      flex: 1 1 380px;
     }
 
-    .course-meta-top {
-      margin-top: 12px;
-      font-size: 1.1rem;
-      opacity: .9;
-    }
-
-    /* BOX CONTENUTO */
-    .course-box {
-      background: white;
-      padding: 28px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      animation: fadeIn .4s ease;
-    }
-
-    #corso-container img.detail-image {
+    .course-image-box img {
       width: 100%;
-      height: 260px;
+      height: 320px;
       object-fit: cover;
-      border-radius: var(--radius);
-      margin-bottom: 20px;
+      border-radius: 16px;
     }
 
-    h3 {
-      margin-top: 28px;
-      font-size: 1.4rem;
+    /* COLONNA DATI */
+    .course-info-box {
+      flex: 1 1 380px;
+      background: white;
+      padding: 26px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .course-info-box h2 {
+      margin-top: 0;
+      font-size: 1.9rem;
       font-weight: 800;
-      color: var(--primary);
+      color: var(--primary-dark);
     }
 
-    .btn-primary {
+    .course-field {
+      margin-bottom: 14px;
+      font-size: 1rem;
+    }
+
+    .course-field strong {
+      color: var(--primary-dark);
       display: inline-block;
-      padding: 14px 24px;
-      background: var(--primary);
-      color: white;
-      border-radius: var(--radius);
-      text-decoration: none;
-      font-weight: 700;
-      margin-top: 20px;
-      transition: 0.25s;
+      width: 110px;
     }
 
-    .btn-primary:hover {
-      background: var(--primary-dark);
-      transform: translateY(-3px);
+    .course-description {
+      margin-top: 35px;
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
     }
 
-    @keyframes fadeIn {
-      from { opacity:0; transform:translateY(10px); }
-      to { opacity:1; transform:translateY(0); }
+    .course-description h3 {
+      margin-top: 0;
+      font-size: 1.4rem;
+      color: var(--primary-dark);
     }
 
+    /* RESPONSIVE */
+    @media (max-width: 850px) {
+      .course-layout {
+        flex-direction: column;
+      }
+      .course-image-box img {
+        height: 240px;
+      }
+    }
   </style>
 </head>
 
@@ -90,58 +93,59 @@
   </nav>
 </header>
 
-<!-- HERO DINAMICO -->
-<section class="course-hero">
-  <h2 id="corso-title">Caricamento...</h2>
-  <p class="course-meta-top" id="corso-meta">—</p>
-</section>
-
-<!-- CONTENUTO PRINCIPALE -->
 <div class="container">
-  <div class="course-box" id="corso-container">
-    <p>Caricamento dettagli...</p>
+
+  <div id="corso-container">
+    <!-- Lo script riempirà qui -->
+    <p>Caricamento corso...</p>
   </div>
+
 </div>
 
 <script src="script.js"></script>
 
-<!-- RENDER PERSONALIZZATO DEL DETTAGLIO -->
 <script>
-  function renderCourseDetail(corso) {
-    const c = corso.fields;
+/* ======== TEMPLATE RENDERING ======== */
+function renderCourseDetail(data) {
+  const c = data.fields;
 
-    // titolo grande nel HERO
-    document.getElementById('corso-title').textContent = c.titolo || "Corso";
+  const img = c.immagine ? c.immagine[0].url : "https://via.placeholder.com/800x500?text=Corso";
 
-    // meta sotto al titolo
-    document.getElementById('corso-meta').textContent =
-      `${c.categoria || ''} • ${c.eta_min || '?'}–${c.eta_max || '?'} anni`;
+  document.getElementById("corso-container").innerHTML = `
+  
+    <div class="course-layout">
 
-    // immagine corretta
-    const img = c.immagine ? c.immagine[0].url : "";
+      <!-- IMMAGINE A SINISTRA -->
+      <div class="course-image-box">
+        <img src="${img}" alt="${c.titolo}">
+      </div>
 
-    // contenuto
-    document.getElementById('corso-container').innerHTML = `
-      ${img ? `<img class="detail-image" src="${img}" alt="${c.titolo}">` : ""}
+      <!-- DETTAGLI A DESTRA -->
+      <div class="course-info-box">
+        <h2>${c.titolo}</h2>
 
+        <div class="course-field"><strong>Categoria:</strong> ${c.categoria || "—"}</div>
+        <div class="course-field"><strong>Età:</strong> ${c.eta_min || "?"}–${c.eta_max || "?"}</div>
+        <div class="course-field"><strong>Indirizzo:</strong> ${c.indirizzo || "—"}</div>
+        <div class="course-field"><strong>Orario:</strong> ${c.orario || "—"}</div>
+        <div class="course-field"><strong>Periodo:</strong> ${c.data_inizio || ""} → ${c.data_fine || ""}</div>
+
+        <div class="course-field"><strong>Email:</strong> ${c.contatto_email || "—"}</div>
+        <div class="course-field"><strong>Telefono:</strong> ${c.contatto_tel || "—"}</div>
+
+        ${c.link_iscrizione ? `
+          <a class="btn" href="${c.link_iscrizione}" target="_blank">Iscriviti</a>
+        ` : ""}
+      </div>
+    </div>
+
+    <!-- DESCRIZIONE SOTTO -->
+    <div class="course-description">
       <h3>Descrizione</h3>
       <p>${c.descrizione || "Nessuna descrizione disponibile."}</p>
-
-      <h3>Dettagli</h3>
-      <p><strong>Indirizzo:</strong> ${c.indirizzo || "—"}</p>
-      <p><strong>Orario:</strong> ${c.orario || "—"}</p>
-      <p><strong>Periodo:</strong> ${c.data_inizio || ""} → ${c.data_fine || ""}</p>
-
-      <h3>Contatti</h3>
-      <p><strong>Email:</strong> ${c.contatto_email || "—"}</p>
-      <p><strong>Telefono:</strong> ${c.contatto_tel || "—"}</p>
-
-      ${c.link_iscrizione ? 
-        `<a class="btn-primary" href="${c.link_iscrizione}" target="_blank">Iscriviti al corso</a>` 
-        : ""
-      }
-    `;
-  }
+    </div>
+  `;
+}
 </script>
 
 </body>
