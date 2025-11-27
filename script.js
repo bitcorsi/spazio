@@ -1,30 +1,24 @@
 /* ==========================================================
-   Portale Maker - script.js (VERSIONE COMPLETA E OTTIMIZZATA)
+   Portale Maker - script.js (VERSIONE CON GOOGLE SHEETS)
    ✔ Lista corsi
    ✔ Ricerca
    ✔ Dettaglio corso
-   ✔ Immagini Airtable
+   ✔ Immagini
    ✔ Campi reali (indirizzo, orario, date, ecc.)
 ========================================================== */
 
 /* ----------------------------------------------------------
-   🔑 CONFIGURAZIONE AIRTABLE
+   🔑 CONFIGURAZIONE GOOGLE SHEETS
 ---------------------------------------------------------- */
-const API_KEY = "patgJP8D7vLtC1PA1.19ec4450820a3f1ee8fe3053adb0a325608ce241c5e8ed3d316d9f0d8290418a";
-const BASE_ID = "appmMqXZlrXlGD6HN";
-const TABLE = "Corsi";
-
-const API_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE}`;
+const SHEET_ID = 'IL_TUO_ID_DEL_FOGLIO'; // Sostituisci con l'ID del tuo Google Sheets
+const API_KEY = 'LA_TUA_API_KEY'; // Sostituisci con la tua API Key
+const SHEET_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Corsi!A2:L?key=${API_KEY}`;
 
 /* ----------------------------------------------------------
    📡 FUNZIONE GENERICA DI CHIAMATA API
 ---------------------------------------------------------- */
-async function fetchAirtable(extra = "") {
-  const res = await fetch(`${API_URL}${extra}`, {
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-    },
-  });
+async function fetchGoogleSheets(extra = "") {
+  const res = await fetch(`${SHEET_URL}${extra}`);
   return await res.json();
 }
 
@@ -37,16 +31,15 @@ async function loadCourses() {
 
   container.innerHTML = "<p>Caricamento corsi...</p>";
 
-  // Recupera solo corsi pubblicati
-  const filter = encodeURIComponent(`pubblicato = 1`);
-  const data = await fetchAirtable(`?filterByFormula=${filter}&maxRecords=300`);
+  // Recupera solo corsi pubblicati (se filtrati da "pubblicato" nel foglio)
+  const data = await fetchGoogleSheets();
 
-  if (!data.records || data.records.length === 0) {
+  if (!data.values || data.values.length === 0) {
     container.innerHTML = "<p>Nessun corso disponibile.</p>";
     return;
   }
 
-  renderCourses(data.records);
+  renderCourses(data.values);
 }
 
 /* ----------------------------------------------------------
@@ -57,26 +50,34 @@ function renderCourses(records) {
   container.innerHTML = "";
 
   records.forEach((rec) => {
-    const c = rec.fields;
-
-    const id = rec.id;
-    const img = c.immagine ? c.immagine[0].url : "https://via.placeholder.com/600x400?text=Portale+Maker";
+    const c = {
+      titolo: rec[0], // Titolo del corso
+      breve_descrizione: rec[1], // Descrizione breve
+      descrizione: rec[2], // Descrizione completa
+      categoria: rec[3], // Categoria
+      eta_min: rec[4], // Età minima
+      eta_max: rec[5], // Età massima
+      data_inizio: rec[6], // Data inizio
+      data_fine: rec[7], // Data fine
+      orario: rec[8], // Orario
+      indirizzo: rec[9], // Indirizzo
+      quartiere: rec[10], // Quartiere
+      contatto_email: rec[11], // Email
+      contatto_tel: rec[12], // Telefono
+      immagine: rec[13] // Immagine (se esiste)
+    };
 
     container.innerHTML += `
       <div class="course-card">
-        <img src="${img}" alt="${c.titolo}" />
+        <img src="${c.immagine || 'https://via.placeholder.com/600x400?text=Portale+Maker'}" alt="${c.titolo}" />
         <div class="course-info">
-
           <h3 class="course-title">${c.titolo}</h3>
-
           <p class="course-meta">
             ${c.categoria || ""} • 
             ${c.eta_min || "?"}–${c.eta_max || "?"} anni
           </p>
-
           <p class="course-meta">${c.indirizzo || ""}</p>
-
-          <a class="btn" href="corso.html?id=${id}">Dettagli</a>
+          <a class="btn" href="corso.html?id=${c.titolo}">Dettagli</a>
         </div>
       </div>
     `;
@@ -113,24 +114,40 @@ async function loadCourseDetail() {
     return;
   }
 
-  const data = await fetchAirtable(`/${id}`);
+  const data = await fetchGoogleSheets();
 
-  if (!data.fields) {
+  // Trova il corso specifico nell'array dei corsi
+  const course = data.values.find((rec) => rec[0] === id);
+
+  if (!course) {
     container.innerHTML = "<p>Corso non trovato.</p>";
     return;
   }
 
-  renderCourseDetail(data);
+  renderCourseDetail(course);
 }
 
 /* ----------------------------------------------------------
    🎨 RENDER DETTAGLIO CORSO
 ---------------------------------------------------------- */
-function renderCourseDetail(data) {
-  const c = data.fields;
-  const container = document.getElementById("corso-container");
+function renderCourseDetail(course) {
+  const c = {
+    titolo: course[0],
+    descrizione: course[2],
+    categoria: course[3],
+    eta_min: course[4],
+    eta_max: course[5],
+    indirizzo: course[9],
+    orario: course[8],
+    data_inizio: course[6],
+    data_fine: course[7],
+    contatto_email: course[11],
+    contatto_tel: course[12],
+    immagine: course[13] // Se hai un URL immagine
+  };
 
-  const img = c.immagine ? c.immagine[0].url : "";
+  const container = document.getElementById("corso-container");
+  const img = c.immagine ? c.immagine : "";
 
   container.innerHTML = `
     <div class="course-detail">
@@ -159,6 +176,6 @@ function renderCourseDetail(data) {
    🚀 AUTO-INIT
 ========================================================== */
 document.addEventListener("DOMContentLoaded", () => {
-  loadCourses();
-  loadCourseDetail();
+  loadCourses();       // per corsi.html
+  loadCourseDetail();  // per corso.html
 });
