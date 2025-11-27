@@ -7,17 +7,21 @@
 
   <link rel="stylesheet" href="style.css" />
 
+  <!-- ICONS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- QR GENERATOR -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
   <style>
-    /* LAYOUT GENERALE */
     .course-layout {
       display: flex;
       gap: 28px;
       margin-top: 40px;
-      align-items: flex-start;
       flex-wrap: wrap;
+      align-items: flex-start;
     }
 
-    /* COLONNA IMMAGINE */
     .course-image-box {
       flex: 1 1 380px;
     }
@@ -29,7 +33,6 @@
       border-radius: 16px;
     }
 
-    /* COLONNA DATI */
     .course-info-box {
       flex: 1 1 380px;
       background: white;
@@ -40,8 +43,8 @@
 
     .course-info-box h2 {
       margin-top: 0;
-      font-size: 1.9rem;
-      font-weight: 800;
+      font-size: 2rem;
+      font-weight: 900;
       color: var(--primary-dark);
     }
 
@@ -50,10 +53,29 @@
       font-size: 1rem;
     }
 
-    .course-field strong {
+    .course-field i {
+      width: 20px;
+      margin-right: 6px;
       color: var(--primary-dark);
-      display: inline-block;
-      width: 110px;
+    }
+
+    .map-box {
+      margin-top: 20px;
+      width: 100%;
+      height: 240px;
+      border: none;
+      border-radius: 12px;
+    }
+
+    .qr-box {
+      text-align: center;
+      margin-top: 28px;
+    }
+
+    .qr-box canvas {
+      width: 140px;
+      height: 140px;
+      border-radius: 12px;
     }
 
     .course-description {
@@ -64,20 +86,9 @@
       box-shadow: var(--shadow);
     }
 
-    .course-description h3 {
-      margin-top: 0;
-      font-size: 1.4rem;
-      color: var(--primary-dark);
-    }
-
-    /* RESPONSIVE */
     @media (max-width: 850px) {
-      .course-layout {
-        flex-direction: column;
-      }
-      .course-image-box img {
-        height: 240px;
-      }
+      .course-layout { flex-direction: column; }
+      .course-image-box img { height: 240px; }
     }
   </style>
 </head>
@@ -94,57 +105,77 @@
 </header>
 
 <div class="container">
-
   <div id="corso-container">
-    <!-- Lo script riempirà qui -->
     <p>Caricamento corso...</p>
   </div>
-
 </div>
 
 <script src="script.js"></script>
 
 <script>
-/* ======== TEMPLATE RENDERING ======== */
 function renderCourseDetail(data) {
   const c = data.fields;
 
-  const img = c.immagine ? c.immagine[0].url : "https://via.placeholder.com/800x500?text=Corso";
+  const img = c.immagine ? c.immagine[0].url : "";
+  const url = window.location.href;
+
+  const indirizzo = c.indirizzo || "";
+  const indirizzoEncoded = encodeURIComponent(indirizzo);
+
+  const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(c.titolo)}&details=${encodeURIComponent(c.descrizione || '')}&location=${indirizzoEncoded}`;
+
+  const whatsappMsg = `Ciao, vorrei informazioni sul corso "${c.titolo}"`;
+  const whatsappUrl = `https://wa.me/${c.contatto_tel || ""}?text=${encodeURIComponent(whatsappMsg)}`;
 
   document.getElementById("corso-container").innerHTML = `
-  
+
     <div class="course-layout">
 
-      <!-- IMMAGINE A SINISTRA -->
+      <!-- IMMAGINE SINISTRA -->
       <div class="course-image-box">
         <img src="${img}" alt="${c.titolo}">
       </div>
 
-      <!-- DETTAGLI A DESTRA -->
+      <!-- INFO DESTRA -->
       <div class="course-info-box">
         <h2>${c.titolo}</h2>
 
-        <div class="course-field"><strong>Categoria:</strong> ${c.categoria || "—"}</div>
-        <div class="course-field"><strong>Età:</strong> ${c.eta_min || "?"}–${c.eta_max || "?"}</div>
-        <div class="course-field"><strong>Indirizzo:</strong> ${c.indirizzo || "—"}</div>
-        <div class="course-field"><strong>Orario:</strong> ${c.orario || "—"}</div>
-        <div class="course-field"><strong>Periodo:</strong> ${c.data_inizio || ""} → ${c.data_fine || ""}</div>
+        <div class="course-field"><i class="fa-solid fa-tags"></i> <strong>${c.categoria || "—"}</strong></div>
+        <div class="course-field"><i class="fa-solid fa-user"></i> Età: ${c.eta_min || "?"}–${c.eta_max || "?"}</div>
+        <div class="course-field"><i class="fa-solid fa-location-dot"></i> ${indirizzo || "—"}</div>
+        <div class="course-field"><i class="fa-solid fa-clock"></i> ${c.orario || "—"}</div>
+        <div class="course-field"><i class="fa-solid fa-calendar"></i> ${c.data_inizio || ""} → ${c.data_fine || ""}</div>
 
-        <div class="course-field"><strong>Email:</strong> ${c.contatto_email || "—"}</div>
-        <div class="course-field"><strong>Telefono:</strong> ${c.contatto_tel || "—"}</div>
+        <div class="course-field"><i class="fa-solid fa-envelope"></i> ${c.contatto_email || "—"}</div>
+        <div class="course-field"><i class="fa-brands fa-whatsapp"></i> <a class="btn" href="${whatsappUrl}" target="_blank">Contatta su WhatsApp</a></div>
 
-        ${c.link_iscrizione ? `
-          <a class="btn" href="${c.link_iscrizione}" target="_blank">Iscriviti</a>
-        ` : ""}
+        <div class="course-field"><i class="fa-solid fa-calendar-plus"></i>
+          <a class="btn" href="${calendarUrl}" target="_blank">Aggiungi al calendario</a>
+        </div>
+
+        <iframe class="map-box"
+          src="https://www.google.com/maps?q=${indirizzoEncoded}&output=embed">
+        </iframe>
+
+        <div class="qr-box">
+          <h4>Condividi</h4>
+          <canvas id="qr"></canvas>
+        </div>
       </div>
     </div>
 
-    <!-- DESCRIZIONE SOTTO -->
     <div class="course-description">
       <h3>Descrizione</h3>
       <p>${c.descrizione || "Nessuna descrizione disponibile."}</p>
     </div>
   `;
+
+  // QR CODE
+  const qr = new QRious({
+    element: document.getElementById('qr'),
+    value: url,
+    size: 200
+  });
 }
 </script>
 
